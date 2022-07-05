@@ -1,4 +1,4 @@
-package com.codedifferently.tankofamerica.domain.account.controllers.models;
+package com.codedifferently.tankofamerica.domain.account.models;
 
 import com.codedifferently.tankofamerica.domain.user.models.User;
 import org.hibernate.annotations.GenericGenerator;
@@ -16,7 +16,7 @@ public class Account {
     @Type(type = "uuid-char")
     private UUID id;
 
-    private String accountName;
+    private String name;
 
     private Double balance;
 
@@ -28,12 +28,18 @@ public class Account {
 
     public Account(String accountName, Double balance, User owner) {
         this.owner = owner;
-        this.accountName = accountName;
+        this.name = accountName;
         this.balance = balance;
     }
 
-    public Account(String accountName, Double balance) {
-        this.accountName = accountName;
+    public Account(String accountName, User owner) {
+        this.name = accountName;
+        this.balance = 0.0;
+        this.owner = owner;
+    }
+
+    public Account(String name, Double balance) {
+        this.name = name;
         this.balance = balance;
     }
 
@@ -41,8 +47,8 @@ public class Account {
         this.id = id;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setBalance(Double balance) {
@@ -61,8 +67,8 @@ public class Account {
         return id;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getName() {
+        return name;
     }
 
 
@@ -71,6 +77,7 @@ public class Account {
     }
 
     public String toString() {
-        return String.format("%d %s %.2f %s ", id, accountName, balance,owner.toString());
+        return String.format("account %s with a balance of  %.2f owned by %s %s with id %s",
+                name, balance,owner.getFirstName(),owner.getLastName(),id);
     }
 }

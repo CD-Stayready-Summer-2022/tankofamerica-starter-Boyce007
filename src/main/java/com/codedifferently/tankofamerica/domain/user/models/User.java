@@ -1,6 +1,6 @@
 package com.codedifferently.tankofamerica.domain.user.models;
 
-import com.codedifferently.tankofamerica.domain.account.controllers.models.Account;
+import com.codedifferently.tankofamerica.domain.account.models.Account;
 
 import javax.persistence.*;
 import java.util.Set;

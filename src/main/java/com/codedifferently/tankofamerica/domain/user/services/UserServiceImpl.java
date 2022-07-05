@@ -1,6 +1,6 @@
 package com.codedifferently.tankofamerica.domain.user.services;
 
-import com.codedifferently.tankofamerica.domain.account.UserNotFoundException;
+import com.codedifferently.tankofamerica.domain.exceptions.UserNotFoundException;
 import com.codedifferently.tankofamerica.domain.user.models.User;
 import com.codedifferently.tankofamerica.domain.user.repos.UserRepo;
 import org.slf4j.Logger;
@@ -42,5 +42,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException(String.format("User with id {} not found", userId));
         return optional.get();
     }
+
+
 
 }
