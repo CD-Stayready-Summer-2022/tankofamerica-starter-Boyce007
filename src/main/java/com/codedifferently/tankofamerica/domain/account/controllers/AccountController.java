@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.transaction.NoTransactionException;
 
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class AccountController {
 
 
     @Autowired
-    public AccountController(AccountService accountService,UserService userService) {
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
 
@@ -64,11 +65,24 @@ public class AccountController {
         try {
             Account account = accountService.getById(id);
             accountService.deposit(money,id);
-            return String.format("You have deposited $%.2f into your account \n your new balance is $%.2f",money,account.getBalance());
+            return String.format("You have deposited $%.2f into your account",money);
         } catch (AccountNotFoundException e) {
             return "Account with id " + id +" not found ";
         } catch (InvalidDepositException e) {
             return "amount " + money + " cannot be deposited into account";
+        }
+
+    }
+    @ShellMethod("withdrawal money ")
+    public String withdrawal(@ShellOption({"-I","Account id"})UUID id,
+                             @ShellOption({"-A","Amount"}) Double amount) {
+        try {
+            accountService.deposit(amount,id);
+            return String.format("You withdrew $%.2f from your account",amount);
+        } catch (AccountNotFoundException e) {
+           return  "Account with id " + id +" not found ";
+        } catch (InvalidDepositException e) {
+           return " withdrawal not available Account Overdrawn ";
         }
 
     }
@@ -83,4 +97,30 @@ public class AccountController {
         }
 
     }
+
+    @ShellMethod("get all transactions")
+    public String getAllTransactions(@ShellOption({"-I","Account id"}) UUID id ) {
+        try {
+            String transactions = accountService.getAllTransactionsFromAccount(id);
+            return transactions;
+        } catch (AccountNotFoundException e) {
+            return "Account with id " + id +" not found ";
+        } catch (NoTransactionException e) {
+            return "Account has made no transactions";
+        }
+    }
+
+    @ShellMethod("get latest transaction")
+    public String getLatestTransaction(@ShellOption({"-I","Account id"}) UUID id ) {
+        try {
+            String transaction = accountService.getLatestTransactions(id);
+            return transaction;
+        } catch (AccountNotFoundException e) {
+            return "Account with id " + id +" not found ";
+        } catch (NoTransactionException e) {
+            return "Account has made no transactions";
+        }
+    }
+
+
 }

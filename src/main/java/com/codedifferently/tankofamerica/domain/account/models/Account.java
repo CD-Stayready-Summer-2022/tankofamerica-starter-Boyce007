@@ -1,10 +1,12 @@
 package com.codedifferently.tankofamerica.domain.account.models;
 
+import com.codedifferently.tankofamerica.domain.transcation.models.Transaction;
 import com.codedifferently.tankofamerica.domain.user.models.User;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -19,6 +21,9 @@ public class Account {
     private String name;
 
     private Double balance;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="account")
+    private List<Transaction> transactions;
 
     @ManyToOne()
     private User owner;
@@ -74,6 +79,10 @@ public class Account {
 
     public Double getBalance() {
         return balance;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
     public String toString() {
