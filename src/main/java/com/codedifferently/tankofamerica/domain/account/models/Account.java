@@ -22,7 +22,7 @@ public class Account {
 
     private Double balance;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="account")
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy="account")
     private List<Transaction> transactions;
 
     @ManyToOne()
